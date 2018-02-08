@@ -1,0 +1,19 @@
+创建与合并分支：
+	创建dev分支，然后切换到dev分支:
+		git checkout -b dev 
+	其中-b参数表示创建并切换，相当于以下两条命令：
+		git branch dev
+		git checkout dev
+	用git branch命令查看当前分支
+		git branch
+			*dev   *表示当前分支
+          		 master
+	切换分支的方法：
+		git branch master
+	合并分支：
+		git merge dev
+	删除分支后删除分支
+		git branch -d dev
+	查看分支的合并情况
+		git log --graph --pretty=oneline --abbrev-commit
+
