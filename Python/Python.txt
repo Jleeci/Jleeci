@@ -230,6 +230,120 @@
 		为了让方法或者特性变为私有（从外部无法访问），只要在它的名字前面加上双下划线即可。
 		在类的内部定义中，所有以双下划线开始的名字都被“翻译”成前面加上单下划线和类名的形式。eg:ex._Example.__private()
 
-		在类的定义去并不只限于使用def语句。可以使用诸如print之类的。
+		在类的定义中不只限于使用def语句。可以使用诸如print之类的。
+		封装是对全局作用域中其他区隐藏多余信息的原则。是可以不用关心对象是如何构建的而直接进行使用。
+		超类：
+			子类可以扩展超类的定义。将其他类名卸载class语句后的圆括号可以指定超类。
+		调查继承
+			如果想要查看一个类是否是另一个的子类，可以使用内建的issubclass函数；
+			如果想要知道已知类的基类（们），可以直接使用它的特殊特性——base__;
+			同样，还能使用isinstance方法检查一个对象是否是一个类的实例
+			查看一个对象属于哪个类，可以使用——class__特性。
+		多重继承：（尽量不要使用）
+			如果一个方法从多个超类继承（也就是说你有两个具有相同名字的不同方法），那么必须要注意一下超类的顺序：先继承的类中的方法会重写后继承的类中的方法。
 
+
+		接口和内省
+			接口的概念与多态有关。在处理多态对象时，只要关心它的接口即可————也就是公开的方法和特性。在Python中，不用显式的指定对象必须包含哪些方法才能作为参数接收。
+			一般来说只需要让对象符合当前的接口，但是还可以更灵活一些。除了调用方法然后期待一切顺利之外，还可检查所需方法是否已经存在。
+				检查方法是否存在：hasattr(eg,'test')
+				检查方法是否可以使用：callable(getattr(eg,'test',None))【3.0使用hasattr(x,'__call__')】
+				设置对象的特性：setattr(eg,'name','Jleeci')
+
+	第八章 异常
+		raise语句
+			抛出一个异常 raise Exception
+			查看异常类
+			import exceptions 
+			dir(exceptions)
+		自定义异常类
+			class SomeCustomException(Exception):pass
+		如果捕捉到了异常，但是又想重新引发它，那么可以调用不带参数的raise
+			抛出空异常直接使用raise不带参数。
+		用一个块捕获多个异常：
+			except(OneErroe,TwoError,ThreeErroe)
+		捕捉异常对象：except(Exception),e  except(Exception) as e  
+
+		有些情况，一些坏事发生时执行一段代码是很有用的；可以像对条件和循环语句那样，给try/except语句加个else子句：
+			try:
+				pass
+			except:
+				pass
+			else:
+				pass
+		finally:
+			可以直接与try使用，也可以与try/except/else/使用
+
+	第九章 魔法方法、属性和迭代器
+
+	魔法方法： 名称前后都加上两个下划线，这种拼写表示名字有特殊含义，由这些名字组成的集合所包含的方法称为魔法方法，那么这个方法会在特殊的情况下呗Python调用。而几乎没有直接调用它们的必要
+
+	新式类：
+		方法一：
+			在.py文件头部声明：
+				——metaclass——=type
+		方法二：子类话内建类object
+			class NewStyle(object):
+				code in here
+			class OldStyle:
+				code in here
+	构造方法：
+		__init__
+		有参/无参构造
+	重写一般方法和特殊的构造方法
+		子类重写父类构造方法：
+		 方法一（老版本诸多使用）：
+		 class child(Parent):
+		 	def __init__(self):
+		 		Parent.__init__(self)
+		 		......
+		 方法二(3.0新用法必须声明为新类 metaclass=type)：
+		 	class child(Parent):
+			 	def __init__(self):
+			 		super(child,self).__init__()
+	property函数：
+		使用时需要使用新式类。
+		函数创建了一个属性，其中访问器函数被用作参数（先是取值，然后是赋值）
+		property(fget,fset[,fdel[,doc]])
+	静态方法和类成员方法
+		静态方法和类成员方法分别在创建时分别被装入Staticmethod类型和Classmethod类型的对象中。静态方法的定义没有self参数，且能够被类本身直接调用。类方法在定义时需要名为cls的类似于self的参数，类成员方法可以直接用类的具体对象调用。但cls参数是自动被绑定到类的。其两种设置方式：
+		一：smeth=staticmethod(smeth)
+			cmeth=classmethod(cmeth)
+		二装饰者模式：
+			@staticmethod
+			@classmethod
+
+	迭代器
+		__iter__
+		迭代器对象:一个实现了__iter__方法的对象是可迭代的，一个实现了next方法的对象则是迭代器。
+
+	生成器
+		一种用普通的函数语法定义的迭代器。任何包含yield语句的函数称为生成器。
+
+
+	模块：	
+		导入模块
+		1.import math
+		2.from math import sin
+
+		将任意位置的模块导入：
+		import sys
+		sys.path.append('c:/python')
+
+		操作自动化：
+			sys.path.expanduser('~/python')
+
+		测试：
+			if __name__=="__main__":
+				test()
+		包：
+			包基本上就是另外一类模块，它们能包含其他模块。当模块存储在文件中时（*.py），包就是模块所在的目录。
+			为了让python将其作为包对待，它必须包含一个命名为__init__.py的文件。
+
+
+
+文件：
+	打开文件：
+		open(name[,mode[,buffering]])  mode:r/w/a/b/+    读/写/追加/二进制/读、写
+									   buffering: 0、False/1、True/n>1  操作硬盘/操作内存/设置缓冲区大小
 		
